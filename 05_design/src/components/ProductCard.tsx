@@ -1,6 +1,7 @@
 import type { Product } from '../types/product';
 import { ProductsContainer } from '../store/products';
-import { Eye, Edit, Trash2 } from 'lucide-react';
+import { CartContainer } from '../store/cart';
+import { Eye, Edit, Trash2, Plus } from 'lucide-react';
 
 interface ProductCardProps {
   product: Product;
@@ -8,6 +9,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   const { openDialog } = ProductsContainer.useContainer();
+  const { addToCart, loading: cartLoading } = CartContainer.useContainer();
 
   const handleView = () => {
     openDialog('view', product);
@@ -19,6 +21,17 @@ export function ProductCard({ product }: ProductCardProps) {
 
   const handleDelete = () => {
     openDialog('delete', product);
+  };
+
+  const handleAddToCart = async () => {
+    if (product.stock <= 0) return;
+    
+    try {
+      await addToCart({ product_id: product.id, quantity: 1 });
+    } catch (error) {
+      // Error handling is done in the cart container
+      console.error('Failed to add to cart:', error);
+    }
   };
 
   return (
@@ -56,6 +69,14 @@ export function ProductCard({ product }: ProductCardProps) {
           >
             <Edit className="w-[14px] h-[14px]" />
             Edit
+          </button>
+          <button
+            onClick={handleAddToCart}
+            disabled={product.stock <= 0 || cartLoading}
+            className="inline-flex items-center justify-center p-1.5 text-white bg-green-600 rounded-[6.75px] hover:bg-green-700 transition-colors w-[31.5px] h-[28px] disabled:opacity-50 disabled:cursor-not-allowed"
+            title={product.stock <= 0 ? 'Out of stock' : 'Add to cart'}
+          >
+            <Plus className="w-[14px] h-[14px]" />
           </button>
           <button
             onClick={handleDelete}

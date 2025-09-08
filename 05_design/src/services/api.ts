@@ -1,4 +1,4 @@
-import type { Product, CreateProductRequest, UpdateProductRequest } from '../types/product';
+import type { Product, CreateProductRequest, UpdateProductRequest, CartItem, AddToCartRequest, UpdateCartItemRequest } from '../types/product';
 
 const API_BASE_URL = 'http://localhost:8000'; // Adjust based on your FastAPI backend
 
@@ -55,6 +55,57 @@ export const productApi = {
 
   async deleteProduct(id: number): Promise<void> {
     const response = await fetch(`${API_BASE_URL}/products/${id}`, {
+      method: 'DELETE',
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new ApiError(response.status, errorText || 'Request failed');
+    }
+  },
+};
+
+export const cartApi = {
+  async getCartItems(): Promise<CartItem[]> {
+    const response = await fetch(`${API_BASE_URL}/cart`);
+    return handleResponse<CartItem[]>(response);
+  },
+
+  async addToCart(request: AddToCartRequest): Promise<CartItem> {
+    const response = await fetch(`${API_BASE_URL}/cart`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request),
+    });
+    return handleResponse<CartItem>(response);
+  },
+
+  async updateCartItem(cartItemId: number, request: UpdateCartItemRequest): Promise<CartItem> {
+    const response = await fetch(`${API_BASE_URL}/cart/${cartItemId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request),
+    });
+    return handleResponse<CartItem>(response);
+  },
+
+  async removeFromCart(cartItemId: number): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/cart/${cartItemId}`, {
+      method: 'DELETE',
+    });
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new ApiError(response.status, errorText || 'Request failed');
+    }
+  },
+
+  async clearCart(): Promise<void> {
+    const response = await fetch(`${API_BASE_URL}/cart`, {
       method: 'DELETE',
     });
     
