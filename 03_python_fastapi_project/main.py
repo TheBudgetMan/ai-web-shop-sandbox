@@ -56,13 +56,14 @@ class CartItemDTO(BaseModel):
     class Config:
         from_attributes = True
 
+from pydantic import BaseModel, Field, field_serializer
+
 class AddToCartDTO(BaseModel):
     product_id: int
-    quantity: int = 1
+    quantity: int = Field(default=1, ge=1)
 
 class UpdateCartItemDTO(BaseModel):
-    quantity: int
-
+    quantity: int = Field(ge=1)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     await create_tables()
