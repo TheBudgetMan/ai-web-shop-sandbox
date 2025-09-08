@@ -1,0 +1,35 @@
+{
+    "servers": {
+        "Framelink Figma MCP": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "figma-developer-mcp",
+                "--figma-api-key=",
+                "--stdio"
+            ],
+            "type": "stdio"
+        },
+        "playwright": {
+            "command": "npx",
+            "args": [
+                "@playwright/mcp@latest"
+            ]
+        },
+        "sequential-thinking": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@modelcontextprotocol/server-sequential-thinking"
+            ]
+        }
+    },
+    "inputs": [
+        {
+            "type": "promptString",
+            "id": "figma-api-key",
+            "description": "Figma API Key",
+            "password": true
+        }
+    ]
+}
