@@ -211,9 +211,9 @@ async def update_cart_item(cart_item_id: int, update_dto: UpdateCartItemDTO, db:
     product_result = await db.execute(
         select(Product).filter(Product.id == cart_item.product_id)
     )
-   product = product_result.scalar_one_or_none()
-   if not product:
-       raise HTTPException(status_code=404, detail="Product not found")
+    product = product_result.scalar_one_or_none()
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
 
     if product.stock < update_dto.quantity:
         raise HTTPException(
