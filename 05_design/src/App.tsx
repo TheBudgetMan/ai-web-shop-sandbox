@@ -1,9 +1,11 @@
 import { ProductsContainer } from './store/products';
+import { CartContainer } from './store/cart';
 import { ProductGrid } from './components/ProductGrid';
 import { AddProductDialog } from './components/AddProductDialog';
 import { EditProductDialog } from './components/EditProductDialog';
 import { ProductDetailsDialog } from './components/ProductDetailsDialog';
 import { DeleteProductDialog } from './components/DeleteProductDialog';
+import { Cart } from './components/Cart';
 import { Search, Plus } from 'lucide-react';
 
 function AppContent() {
@@ -46,6 +48,9 @@ function AppContent() {
       <EditProductDialog />
       <ProductDetailsDialog />
       <DeleteProductDialog />
+      
+      {/* Cart */}
+      <Cart />
     </div>
   );
 }
@@ -53,7 +58,9 @@ function AppContent() {
 function App() {
   return (
     <ProductsContainer.Provider>
-      <AppContent />
+      <CartContainer.Provider>
+        <AppContent />
+      </CartContainer.Provider>
     </ProductsContainer.Provider>
   );
 }

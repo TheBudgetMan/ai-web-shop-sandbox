@@ -1,0 +1,19 @@
+reviews:
+  request_changes_workflow: false
+  auto_review:
+    enabled: true
+    ignore_title_keywords:
+      - "WIP"
+      - "DO NOT MERGE"
+  drafts: false
+  path_filters:
+    - "!node_modules/"
+    - "!**/*.lock"
+  path_instructions:
+    - path: "05_design/src/components/"
+      instructions: "Follow React component best practices and ensure proper prop validation"
+    - path: "**/*.test.js"
+      instructions: "Ensure tests are comprehensive and follow testing best practices"
+
+chat:
+  auto_reply: true
