@@ -208,11 +208,18 @@ async def update_cart_item(cart_item_id: int, update_dto: UpdateCartItemDTO, db:
         raise HTTPException(status_code=404, detail="Cart item not found")
     
     # Get associated product to check stock
-    product_result = await db.execute(select(Product).filter(Product.id == cart_item.product_id))
-    product = product_result.scalar_one()
-    
+    product_result = await db.execute(
+        select(Product).filter(Product.id == cart_item.product_id)
+    )
+   product = product_result.scalar_one_or_none()
+   if not product:
+       raise HTTPException(status_code=404, detail="Product not found")
+
     if product.stock < update_dto.quantity:
-        raise HTTPException(status_code=400, detail=f"Insufficient stock. Available: {product.stock}")
+        raise HTTPException(
+            status_code=400,
+            detail=f"Insufficient stock. Available: {product.stock}"
+        )
     
     cart_item.quantity = update_dto.quantity
     await db.commit()
